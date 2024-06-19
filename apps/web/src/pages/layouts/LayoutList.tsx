@@ -1,14 +1,5 @@
 import styled from '@emotion/styled';
 import { ActionIcon, useMantineTheme } from '@mantine/core';
-import type { ILayoutEntity } from '@novu/shared';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { useCallback, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-
-import { deleteLayoutById } from '../../../api/layouts';
-import { QueryKeys } from '../../../api/query.keys';
-import { When } from '../../../components/utils/When';
 import {
   colors,
   Text,
@@ -20,9 +11,18 @@ import {
   IExtendedColumn,
   Table,
 } from '@novu/design-system';
-import { useEnvController, useLayouts } from '../../../hooks';
-import { errorMessage, successMessage } from '../../../utils/notifications';
-import { DeleteConfirmModal } from '../../templates/components/DeleteConfirmModal';
+import type { ILayoutEntity } from '@novu/shared';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { useCallback, useState } from 'react';
+import { deleteLayoutById } from '../../api/layouts';
+import { QueryKeys } from '../../api/query.keys';
+import { When } from '../../components/utils/When';
+
+import { useAuth, useEnvController, useLayouts } from '../../hooks';
+import { errorMessage, successMessage } from '../../utils/notifications';
+import { useSegment } from '../../components/providers/SegmentProvider';
+import { DeleteConfirmModal } from '../templates/components/DeleteConfirmModal';
 import { LayoutEditor } from './LayoutEditor';
 
 const enum ActivePageEnum {
@@ -30,15 +30,13 @@ const enum ActivePageEnum {
   EDIT_LAYOUT = 'edit_layout',
   CREATE_LAYOUT = 'create_layout',
 }
-type LayoutsListPageContext = {
-  handleLayoutAnalytics: (event: string, data?: Record<string, unknown>) => void;
-};
 
-export function LayoutsListPage() {
-  const { handleLayoutAnalytics } = useOutletContext<LayoutsListPageContext>();
+export function LayoutList() {
+  const { currentOrganization, currentUser } = useAuth();
+  const { environment, readonly } = useEnvController();
+  const segment = useSegment();
   const theme = useMantineTheme();
   const queryClient = useQueryClient();
-  const { readonly } = useEnvController();
   const [page, setPage] = useState<number>(0);
   const [editId, setEditId] = useState('');
   const [activeScreen, setActiveScreen] = useState(ActivePageEnum.LAYOUTS_LIST);
@@ -161,6 +159,15 @@ export function LayoutsListPage() {
     editLayout(row.values._id);
   }
 
+  const handleLayoutAnalytics = (event: string, data?: Record<string, unknown>) => {
+    segment.track(`[Layout] - ${event}`, {
+      _organizationId: currentOrganization?._id,
+      _environmentId: environment?._id,
+      userId: currentUser?._id,
+      ...data,
+    });
+  };
+
   return (
     <>
       <When truthy={editId.length && activeScreen === ActivePageEnum.EDIT_LAYOUT}>
@@ -189,6 +196,7 @@ export function LayoutsListPage() {
 
         <TemplateListTableWrapper>
           <Table
+            data-test-id="layouts-table"
             loading={isLoading || isLoadingDelete}
             columns={columns}
             data={layouts || []}

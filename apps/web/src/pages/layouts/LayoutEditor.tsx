@@ -21,13 +21,13 @@ import {
   shadows,
   Tooltip,
 } from '@novu/design-system';
-import { useEnvController, useLayoutsEditor, usePrompt } from '../../../hooks';
-import { errorMessage, successMessage } from '../../../utils/notifications';
-import { QueryKeys } from '../../../api/query.keys';
-import { VariablesManagement } from '../../templates/components/email-editor/variables-management/VariablesManagement';
-import { UnsavedChangesModal } from '../../templates/components/UnsavedChangesModal';
-import { VariableManager } from '../../templates/components/VariableManager';
-import { CustomCodeEditor } from '../../templates/components/CustomCodeEditor';
+import { useEnvController, useLayoutsEditor, usePrompt } from '../../hooks';
+import { errorMessage, successMessage } from '../../utils/notifications';
+import { QueryKeys } from '../../api/query.keys';
+import { VariablesManagement } from '../templates/components/email-editor/variables-management/VariablesManagement';
+import { UnsavedChangesModal } from '../templates/components/UnsavedChangesModal';
+import { VariableManager } from '../templates/components/VariableManager';
+import { CustomCodeEditor } from '../templates/components/CustomCodeEditor';
 
 interface ILayoutForm {
   content: string;

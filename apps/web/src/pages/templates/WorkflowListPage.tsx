@@ -1,6 +1,6 @@
 import { ChangeEventHandler, useState } from 'react';
 import { ActionIcon, useMantineTheme, Group } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
+import { createSearchParams, Link, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { format } from 'date-fns';
 import {
@@ -27,7 +27,7 @@ import {
   INotificationTemplateExtended,
   useDebouncedSearch,
 } from '../../hooks';
-import { ROUTES } from '../../constants/routes.enum';
+import { ROUTES } from '../../constants/routes';
 import { parseUrl } from '../../utils/routeUtils';
 import { TemplatesListNoData } from './TemplatesListNoData';
 import { useSegment } from '../../components/providers/SegmentProvider';
@@ -216,7 +216,12 @@ function WorkflowListPage() {
   };
 
   function onRowClick(row) {
-    navigate(parseUrl(ROUTES.WORKFLOWS_EDIT_TEMPLATEID, { templateId: row.values._id }));
+    navigate({
+      pathname: parseUrl(ROUTES.WORKFLOWS_EDIT_TEMPLATEID, { templateId: row.values._id }),
+      search: createSearchParams({
+        type: row.original.type,
+      }).toString(),
+    });
   }
 
   const debouncedSearchChange = useDebouncedSearch(setSearchQueryParam);

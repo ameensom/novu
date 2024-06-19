@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { useMantineColorScheme } from '@mantine/core';
 
+import type { ICreateOrganizationDto, IResponseError, ProductUseCases } from '@novu/shared';
 import { JobTitleEnum } from '@novu/shared';
-import type { ProductUseCases, IResponseError, ICreateOrganizationDto, IJwtPayload } from '@novu/shared';
-import { HubspotForm, useAuth, useSegment } from '@novu/shared-web';
+import { useAuth, useVercelIntegration, useVercelParams } from '../../../hooks';
+import { useSegment } from '../../../components/providers/SegmentProvider';
+import { HubspotForm } from '../../../ee/billing/components/HubspotForm';
 
 import { api } from '../../../api/api.client';
-import { useVercelIntegration, useVercelParams } from '../../../hooks';
-import { ROUTES } from '../../../constants/routes.enum';
+import { ROUTES } from '../../../constants/routes';
 import { HUBSPOT_FORM_IDS } from '../../../constants/hubspotForms';
 import SetupLoader from './SetupLoader';
 import { successMessage } from '@novu/design-system';

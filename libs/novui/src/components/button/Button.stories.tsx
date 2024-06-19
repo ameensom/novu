@@ -1,55 +1,83 @@
+import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
-import { StoryFn, Meta } from '@storybook/react';
+import { Grid } from '../../../styled-system/jsx';
+import { IconSettings } from '../../icons';
+import { Title } from '../title';
 import { Button } from './Button';
-import { Flex } from '../../../styled-system/jsx';
-import { Icon10K, IconInfo } from '../../icons';
 
 export default {
   title: 'Components/Button',
   component: Button,
-  argTypes: {},
+  argTypes: {
+    colorPalette: {
+      options: ['mode.cloud', 'mode.local'],
+      control: { type: 'select' },
+    },
+    size: {
+      options: ['sm', 'md', 'lg'],
+      control: { type: 'select' },
+    },
+  },
 } as Meta<typeof Button>;
 
-const Template: StoryFn<typeof Button> = ({ ...args }) => <Button {...args}>Click Me</Button>;
+const Template: StoryFn<typeof Button> = ({ ...args }) => {
+  return (
+    <Grid gridTemplateColumns="5">
+      <Title variant="subsection">Default</Title>
+      <Button {...args}>Test</Button>
+      <Button {...args} Icon={IconSettings}>
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} disabled>
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} loading>
+        Test
+      </Button>
 
-export const Default = Template.bind({});
-Default.args = {};
+      <Title variant="subsection">Filled</Title>
+      <Button {...args} variant="filled">
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="filled">
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="filled" disabled>
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="filled" loading>
+        Test
+      </Button>
 
-export const Loading = Template.bind({});
-Loading.args = {
-  loading: true,
+      <Title variant="subsection">Transparent</Title>
+      <Button {...args} variant="transparent">
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="transparent">
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="transparent" disabled>
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="transparent" loading>
+        Test
+      </Button>
+
+      <Title variant="subsection">Outline</Title>
+      <Button {...args} variant="outline">
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="outline">
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="outline" disabled>
+        Test
+      </Button>
+      <Button {...args} Icon={IconSettings} variant="outline" loading>
+        Test
+      </Button>
+    </Grid>
+  );
 };
 
-export const icon = () => (
-  <Flex>
-    <Button size="lg" Icon={Icon10K}>
-      Large
-    </Button>
-    <Button Icon={IconInfo}>Medium</Button>
-  </Flex>
-);
-
-export const filled = () => (
-  <Flex>
-    <Button size="lg">Large</Button>
-    <Button>Medium</Button>
-  </Flex>
-);
-
-export const outline = () => (
-  <Flex>
-    <Button size="lg" variant="outline">
-      Large
-    </Button>
-    <Button variant="outline">Medium</Button>
-  </Flex>
-);
-
-export const disabled = () => (
-  <Flex>
-    <Button disabled>Filled</Button>
-    <Button variant="outline" disabled>
-      Outline
-    </Button>
-  </Flex>
-);
+export const Default = Template.bind({});
